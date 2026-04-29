@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Scaler Personas Chatbot
+
+A multi-persona AI chatbot built with Next.js, TypeScript, and Groq.
+
+This app lets users interact with different Scaler leaders (Anshuman, Abhimanyu, and Kshitij), each with a distinct speaking style and system prompt. The frontend provides a smooth, modern chat experience and the backend routes messages to Groq's LLM API.
+
+## Features
+
+- Multi-persona chat experience with instant persona switching
+- Persona-specific prompt engineering and curated starter questions
+- Responsive chat UI with typing indicator and suggestion chips
+- Error handling for missing config and API failures
+- Next.js App Router API endpoint for server-side model calls
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Groq SDK (`groq-sdk`)
+
+## Project Structure
+
+```text
+src/
+  app/
+    api/chat/route.ts        # Chat API endpoint (Groq integration)
+    page.tsx                 # Main chat page and state management
+    layout.tsx               # App layout
+  components/
+    ChatWindow.tsx
+    ChatInput.tsx
+    PersonaSwitcher.tsx
+    SuggestionChips.tsx
+    MessageBubble.tsx
+    TypingIndicator.tsx
+  lib/
+    personas.ts              # Persona metadata + system prompts
+    types.ts                 # Shared TypeScript types
+```
 
 ## Getting Started
 
-First, run the development server:
+### 1) Install dependencies
+
+```bash
+npm install
+```
+
+### 2) Configure environment variables
+
+Create a `.env` file in the project root:
+
+```bash
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+### 3) Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Run app in development mode
+- `npm run build` - Create production build
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-## Learn More
+## API Contract
 
-To learn more about Next.js, take a look at the following resources:
+### `POST /api/chat`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Request body:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```json
+{
+  "messages": [
+    { "role": "user", "content": "Hello" }
+  ],
+  "systemPrompt": "You are ..."
+}
+```
 
-## Deploy on Vercel
+Response body:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```json
+{
+  "message": "Model response text"
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Error response:
+
+```json
+{
+  "error": "Error message"
+}
+```
+
+## Deployment
+
+You can deploy this app on platforms that support Next.js (for example [Vercel](https://vercel.com/)).
+
+Make sure `GROQ_API_KEY` is added to your deployment environment variables before going live.
+
+## Troubleshooting
+
+- **`GROQ_API_KEY is not configured`**: Add `GROQ_API_KEY` to `.env` and restart dev server.
+- **API errors from Groq**: Verify key validity, model access, and internet connectivity.
+- **Build/lint issues**: Run `npm run lint` and fix type or style errors before deployment.
